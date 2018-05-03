@@ -1,0 +1,16 @@
+export const SAVE_CLUB = "SAVE_CLUB";
+export const LOAD_CLUBLIST = "LOAD_CLUBLIST";
+export const EDIT_USER = "EDIT_USER";
+export const UPLOAD_IMAGE = "UPLOAD_IMAGE";
+export const ADD_LABEL = "ADD_LABEL";
+export const ADD_CLUB = "ADD_CLUB";
+export const REFRESH_CLUBLIST = "REFRESH_CLUBLIST";
+export const ADD_ACTIVITY = "ADD_ACTIVITY";
+export const SAVE_ACTIVITY = "SAVE_ACTIVITY";
+export const REFRESH_ACTIVITYLIST = "REFRESH_ACTIVITYLIST";
+export const LOAD_ACTIVITY = "LOAD_ACTIVITY";
+export const PART_ACTIVITY = "PART_ACTIVITY";
+export const RECEIVE_TOAST = "RECEIVE_TOAST";
+
+
+
