@@ -1,7 +1,7 @@
 import React, {Component} from "react";
 import {ScrollView} from 'react-native';
-import {List, Avatar} from 'react-native-elements';
-import ListItem from '../CommonComponent/ListItem';
+import {List, Avatar,ListItem} from 'react-native-elements';
+// import ListItem from '../CommonComponent/ListItem';
 
 export default class ActivityList extends Component {
   render() {

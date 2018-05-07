@@ -2,8 +2,8 @@ import React, {Component} from "react";
 import {StyleSheet, ScrollView, View } from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import {Card, Button, List, Avatar,Text} from 'react-native-elements';
-
-import ClubList from './ClubList';
+import {Tabs, Tab,ScrollableTab } from "native-base";
+import ClubList from './AllKindClubList';
 import ClubScreen from './ClubScreen';
 import ClubDetailScreen from './ClubDetailScreen';
 import TextEditScreen from '../MyScreen/TextEditScreen';
@@ -12,6 +12,7 @@ import ActivityAddScreen from './ActivityAddScreen';
 import ClubAddScreen from './ClubAddScreen';
 import MapScreen from './MapScreen';
 import LabeledIcon from '../CommonComponent/LabeledIcon';
+import ClubTab from './AllKindClubList';
 
 import normalize from '../functions/normalizeText'
 import {refreshClubList} from '../../actions/creators';
@@ -42,8 +43,17 @@ class MainScreenComponent extends Component {
             <LabeledIcon navigation={navigation} ion="note" type="octicon" label='电子票'/>
           </View>
         </Card>
-        <ClubList title="我的俱乐部" data={this.props.chiefClubs} navigation={navigation} />
-        <ClubList title="加入的俱乐部" data={this.props.memberClubs} navigation={navigation}  />
+        <Tabs renderTabBar={() => <ScrollableTab />}>
+          <Tab heading="俱乐部">
+            <ClubTab {...this.props}/>
+          </Tab>
+          <Tab heading="好友">
+            <ClubTab {...this.props} />
+          </Tab>
+          <Tab heading="活动聊天组">
+            <ClubTab {...this.props}/>
+          </Tab>
+        </Tabs>
         <Text
           onPress ={()=>navigation.navigate('Club')}
           style={styles.findMore}>+ 发现更多</Text>

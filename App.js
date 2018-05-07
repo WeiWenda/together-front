@@ -1,5 +1,5 @@
-import { AppRegistry } from 'react-native';
-import 'expo'
-import VtogetherHome from './app/components/VtogetherHome'
-console.disableYellowBox = true;
-AppRegistry.registerComponent('vtogether', () => VtogetherHome);
+// import { AppRegistry } from 'react-native';
+// import vtogether from './app/components/VtogetherHome'
+// console.disableYellowBox = true;
+// AppRegistry.registerComponent('vtogether', () => vtogether);
+//

@@ -7,7 +7,8 @@
     "eject": "react-native-scripts eject",
     "android": "react-native-scripts android",
     "ios": "react-native-scripts ios",
-    "test": "jest"
+    "test": "jest",
+    "storybook": "storybook start -p 7007"
   },
   "dependencies": {
     "expo": "^27.0.1",
@@ -16,10 +17,12 @@
     "react": "16.3.1",
     "react-native": "^0.54.4",
     "react-native-elements": "^0.19.1",
+    "react-native-expandable-section-flatlist": "^1.1.6",
     "react-native-image-picker": "^0.26.7",
     "react-native-picker": "^4.3.5",
     "react-native-vector-icons": "^4.6.0",
     "react-native-webview-bridge": "^0.33.0",
+    "react-native-webview-bridge-updated": "^1.0.9",
     "react-native-zss-rich-text-editor": "^1.1.0",
     "react-navigation": "^1.5.11",
     "react-redux": "^5.0.7",
@@ -32,7 +35,15 @@
     "jest": "22.4.3",
     "jest-expo": "^27.0.1",
     "react-native-scripts": "^1.14.0",
-    "react-test-renderer": "16.3.1"
+    "react-test-renderer": "16.3.1",
+    "@storybook/react-native": "^3.4.3",
+    "@storybook/addon-actions": "^3.4.3",
+    "@storybook/addon-links": "^3.4.3",
+    "@storybook/addons": "^3.4.3",
+    "babel-core": "^6.26.3",
+    "babel-runtime": "^6.26.0",
+    "react-dom": "16.3.1",
+    "prop-types": "^15.6.1"
   },
   "jest": {
     "preset": "react-native"
