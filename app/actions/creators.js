@@ -1,6 +1,7 @@
 import {
   ADD_CLUB,
   SAVE_CLUB,
+  UPDATE_CLUB,
   REFRESH_CLUBLIST,
   LOAD_CLUBLIST,
   EDIT_USER,
@@ -28,6 +29,9 @@ export const addClub = (domain,content) => {
 };
 export const saveClub = () => {
   return { type: SAVE_CLUB, data: {} };
+};
+export const updateClub = (data) => {
+  return { type: UPDATE_CLUB, data: {...data} };
 };
 export const addActivity= (domain,content) => {
   return { type: ADD_ACTIVITY, data: {domain:domain,content:content} };

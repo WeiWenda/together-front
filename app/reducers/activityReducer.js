@@ -1,7 +1,7 @@
 import {ADD_ACTIVITY,SAVE_ACTIVITY,PART_ACTIVITY}from '../actions/types';
-import {server} from '../components/config/urls';
-import {transformer} from '../components/functions/helpFunctions';
-import {store} from '../components/VtogetherHome';
+import {server} from '../lib/urls';
+import {transformer} from '../lib/helpFunctions';
+import {store} from '../VtogetherHome';
 import Activity from '../data/Activity';
 import {refreshActivityList} from '../actions/creators';
 
@@ -17,8 +17,9 @@ const saveActivity=(state)=>{
   })
     .then((response) => response.text())
 };
-
-const activityReducer = (state, action) => {
+export const initialState = new Activity('http://oxvctrmxs.bkt.clouddn.com/FkmsAwy0wImJ67t40EQ5dBXHhFfn',
+  "默认", 1);
+const activityReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_ACTIVITY:
       state.set(action.data.domain,action.data.content);

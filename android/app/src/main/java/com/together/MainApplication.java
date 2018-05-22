@@ -3,6 +3,10 @@ package com.together;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+import com.github.alinz.reactnativewebviewbridge.WebViewBridgePackage;
+import com.burnweb.rnsimplealertdialog.RNSimpleAlertDialogPackage;
+import com.AlexanderZaytsev.RNI18n.RNI18nPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.beefe.picker.PickerViewPackage;
 import com.imagepicker.ImagePickerPackage;
@@ -27,6 +31,10 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
+            new WebViewBridgePackage(),
+            new WebViewBridgePackage(),
+            new RNSimpleAlertDialogPackage(),
+            new RNI18nPackage(),
             new VectorIconsPackage(),
             new PickerViewPackage(),
             new ImagePickerPackage(),

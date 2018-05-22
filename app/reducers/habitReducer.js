@@ -1,7 +1,6 @@
 import {ADD_LABEL}from '../actions/types';
-import {server} from '../components/config/urls';
+import {server} from '../lib/urls';
 import shortid from 'shortid';
-import {store } from '../components/VtogetherHome';
 
 const headers = {
   'Accept': 'application/json',
@@ -19,8 +18,18 @@ const addLabel = (state, action) => {
     .then((response) => response.text())
     .then(text => console.log(text));
 };
-
-const habitReducer = (state, action) => {
+const fetchData = (param) => {
+  const url = `${server}${param === 'labels' ? "user/" : ""}${param}`;
+  return fetch(url)
+    .then(text => text.json())
+};
+export const initialState ={
+  habits: [],
+  labels: [],
+};
+fetchData('habits').then(obj => initialState.habits = obj.data);
+fetchData('labels').then(obj => initialState.labels = obj.data);
+const habitReducer = (state = initialState, action) => {
   switch (action.type) {
     case ADD_LABEL:
       addLabel(state, action);

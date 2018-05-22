@@ -137,6 +137,10 @@ android {
 }
 
 dependencies {
+    compile project(':react-native-webview-bridge-updated')
+    compile project(':react-native-webview-bridge')
+    compile project(':react-native-simpledialog-android')
+    compile project(':react-native-i18n')
     compile project(':react-native-vector-icons')
     compile project(':react-native-picker')
     compile project(':react-native-image-picker')
