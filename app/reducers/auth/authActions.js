@@ -122,7 +122,7 @@ export function logoutFailure (error) {
  * haven't used the app for a long time.  Or they used another
  * device and logged out there.
  */
-export function logout () {
+export function logout (navigation) {
   return dispatch => {
     dispatch(logoutRequest())
     return appAuthToken.getSessionToken()
@@ -135,6 +135,7 @@ export function logout () {
         dispatch(loginState())
         dispatch(logoutSuccess())
         dispatch(deleteSessionToken())
+        navigation.navigate('Login')
       })
 
       .catch((error) => {
@@ -271,31 +272,32 @@ export function saveSessionToken (json) {
  *
  * Otherwise, dispatch the error so the user can see
  */
-export function signup (username, email, password) {
+export function signup (username, email, password,navigation) {
   return dispatch => {
     dispatch(signupRequest())
     return BackendFactory().signup({
-      username: username,
-      email: email,
+      name: username,
+      eMail: email,
       password: password
     })
 
       .then((json) => {
         return saveSessionToken(
           Object.assign({}, json,
-            { username: username,
+            { name: username,
               email: email
             })
           )
           .then(() => {
             dispatch(signupSuccess(
               Object.assign({}, json,
-               { username: username,
+               { name: username,
                  email: email
                })
             ))
             dispatch(logoutState())
             // navigate to Tabbar
+            navigation.navigate('App')
           })
       })
       .catch((error) => {
@@ -338,18 +340,19 @@ export function loginFailure (error) {
  * otherwise, dispatch a failure
  */
 
-export function login (username, password) {
+export function login (username, password,navigation) {
   return dispatch => {
     dispatch(loginRequest())
     return BackendFactory().login({
-      username: username,
+      name: username,
       password: password
     })
       .then(function (json) {
-        return saveSessionToken(json)
+        return saveSessionToken(json.data)
           .then(function () {
-            dispatch(loginSuccess(json))
+            dispatch(loginSuccess(json.data))
             // navigate to Tabbar
+            navigation.navigate('App')
             dispatch(logoutState())
           })
       })
@@ -392,7 +395,7 @@ export function resetPasswordFailure (error) {
  * With that enabled, an email can be sent w/ a
  * form for setting the new password.
  */
-export function resetPassword (email) {
+export function resetPassword (email,navigation) {
   return dispatch => {
     dispatch(resetPasswordRequest())
     return BackendFactory().resetPassword({
@@ -401,6 +404,7 @@ export function resetPassword (email) {
       .then(() => {
         dispatch(loginState())
         dispatch(resetPasswordSuccess())
+        navigation.navigate('Login')
       })
       .catch((error) => {
         dispatch(resetPasswordFailure(error))

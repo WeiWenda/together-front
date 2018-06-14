@@ -12,16 +12,35 @@ import ClubEditScreen from './ClubEditScreen';
 import MapScreen from './MapScreen';
 import LabeledIcon from '../../components/LabeledIcon';
 import ClubTab from './AllKindClubList';
+import * as globalActions from '../../reducers/global/globalActions';
 
 import normalize from '../../lib/normalizeText'
 import BottomText from "../../components/BottomText";
 import {connect} from "react-redux";
+import {bindActionCreators} from "redux";
 
 class MainScreenComponent extends Component {
+  constructor() {
+    super();
+    this.state = {
+      enabled:true
+    };
+  }
+  componentWillMount () {
+    this.props.actions.refreshClubList(this.props.userId)
+  }
+  closeScrollEnabled=()=>{
+    console.log('close')
+    this.setState({enabled:false})
+  }
+  openScrollEnabled=()=>{
+    console.log('open')
+    this.setState({enabled:true})
+  }
   render() {
     const {navigation} = this.props;
     return (
-      <ScrollView>
+      <ScrollView scrollEnabled={this.state.enabled}>
         <Card containerStyle={styles.block}>
           <Button icon={{name: 'search'}} title="搜索"
                   borderRadius={8}
@@ -43,13 +62,19 @@ class MainScreenComponent extends Component {
         </Card>
         <Tabs renderTabBar={() => <ScrollableTab />}>
           <Tab heading="俱乐部">
-            <ClubTab  {...this.props}/>
+            <ClubTab openScrollEnabled={this.openScrollEnabled}
+                     closeScrollEnabled={this.closeScrollEnabled}
+                     {...this.props}/>
           </Tab>
           <Tab heading="好友">
-            <ClubTab {...this.props}/>
+            <ClubTab openScrollEnabled={this.openScrollEnabled}
+                     closeScrollEnabled={this.closeScrollEnabled}
+                     {...this.props}/>
           </Tab>
           <Tab heading="活动聊天组">
-            <ClubTab {...this.props}/>
+            <ClubTab openScrollEnabled={this.openScrollEnabled}
+                     closeScrollEnabled={this.closeScrollEnabled}
+                     {...this.props}/>
           </Tab>
         </Tabs>
         <BottomText>已经到底了</BottomText>
@@ -59,13 +84,14 @@ class MainScreenComponent extends Component {
 }
 const mapDispatchToProps = (dispatch) => {
   return {
-    refreshClubList: () => {
-      dispatch(refreshClubList());
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
-  return {...state.userData};
+  return {userId:state.global.currentUser.userId,
+    memberClubs:state.global.memberClubs,
+    chiefClubs:state.global.chiefClubs
+  };
 };
 
 const MainScreen = connect(mapStateToProps, mapDispatchToProps)(MainScreenComponent);

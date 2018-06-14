@@ -5,7 +5,8 @@ import {Fab, Button} from 'native-base';
 import DetailPlane from './DetailPlane';
 import TablelikeItem from '../TablelikeItem';
 import {connect} from 'react-redux';
-import {partActivity} from '../../actions/creators';
+import  * as globalActions from '../../reducers/global/globalActions';
+import {bindActionCreators} from "redux";
 
 class ActivityDetail extends Component {
   constructor(props) {
@@ -98,14 +99,12 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    partActivity: (uid, aid) => {
-      dispatch(partActivity(uid, aid));
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
   return {
-    user_id: state.userData.user_id,
+    user_id: state.global.currentUser.userId,
     toast: state.toast,
   };
 };

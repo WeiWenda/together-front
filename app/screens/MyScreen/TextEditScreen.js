@@ -12,7 +12,10 @@ class TextEditScreen extends Component {
   }
   onSubmit = ev =>{
     let params = this.props.navigation.state.params;
-    params.action(params.domain,ev.nativeEvent.text);
+    if('userId' in params)
+      params.action(params.userId,params.domain,ev.nativeEvent.text);
+    else
+      params.action(params.domain,ev.nativeEvent.text);
     this.props.navigation.goBack();
   };
   render() {

@@ -16,15 +16,14 @@ import LoginScreen from './screens/SignInScreen/Login';
 import RegisterScreen from './screens/SignInScreen/Register';
 import ForgotPasswordScreen from './screens/SignInScreen/ForgotPassword';
 import LoadingScreen from './screens/SignInScreen/Loading';
-import {refreshClubList, refreshActivityList} from './actions/creators';
 import configureStore from './lib/loginConf/configureStore';
 import AuthInitialState from './reducers/auth/authInitialState'
 import DeviceInitialState from './reducers/device/deviceInitialState'
 import GlobalInitialState from './reducers/global/globalInitialState'
-import {initialState as UserInitialState}  from './reducers/userReducer'
 import {initialState as ClubInitialState}  from './reducers/clubReducer'
 import {initialState as ActivityInitialState}  from './reducers/activityReducer'
 import {initialState as HabitInitialState} from './reducers/habitReducer'
+import {Root} from "native-base";
 /**
 * @Author: weiwenda
 * @Description: 自动加载俱乐部列表和活动列表
@@ -36,7 +35,6 @@ function getInitialState () {
     device: (new DeviceInitialState()).set('isMobile', true),
     global: (new GlobalInitialState()),
     toast: null,
-    userData:UserInitialState,
     newClubData:ClubInitialState,
     publicData:HabitInitialState,
     newActivityData:ActivityInitialState
@@ -44,8 +42,6 @@ function getInitialState () {
   return _initState
 }
 const store = configureStore(getInitialState());
-store.dispatch(refreshClubList());
-store.dispatch(refreshActivityList());
 
 const AppStack = createBottomTabNavigator(
   {
@@ -145,7 +141,9 @@ class App extends Component {
   render() {
     return (
       <Provider store={store}>
+        <Root>
         <VtogetherHome/>
+        </Root>
       </Provider>
     );
   }

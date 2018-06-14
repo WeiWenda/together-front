@@ -6,7 +6,7 @@ import normalize from '../../lib/normalizeText';
 import TitledLabels from '../../components/TitledLabels';
 import BottomText from '../../components/BottomText';
 import {Button} from 'react-native-elements';
-import {addLabel} from '../../actions/creators';
+import {addLabel} from '../../reducers/global/globalActions';
 import {connect} from "react-redux";
 import {deepCopy} from "../../lib/helpFunctions";
 
@@ -42,7 +42,10 @@ class LabelsEditScreen extends Component {
 
     const signOutButton = () => {
       let params = this.props.navigation.state.params;
-      params.action(params.domain, this.state.newLabels.join(','));
+      if('userId' in params)
+        params.action(params.userId,params.domain, this.state.newLabels.join(','));
+      else
+        params.action(params.domain, this.state.newLabels.join(','));
       this.props.navigation.goBack();
     };
     this.props.navigation.setParams({signOutButton: signOutButton})

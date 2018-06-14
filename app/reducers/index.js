@@ -1,4 +1,3 @@
-import userData from './userReducer';
 import publicData from './habitReducer';
 import newClubData from './clubReducer';
 import toast from './toastReducer';
@@ -11,7 +10,6 @@ import global from './global/globalReducer'
 const rootReducer = combineReducers({
   auth,
   toast,
-  userData,
   newClubData,
   publicData,
   newActivityData,

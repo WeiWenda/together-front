@@ -49,7 +49,6 @@
 		516DD5B0A15749B9B3635B2C /* Roboto_medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 61AD1DF318C34FE0AB8E13DF /* Roboto_medium.ttf */; };
 		61A6A5764FB542219EED34C8 /* Roboto.ttf in Resources */ = {isa = PBXBuildFile; fileRef = C918162C908048F890487775 /* Roboto.ttf */; };
 		6F7F31D40F32403795A926F1 /* libRNI18n.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 11FB2220BFC14EB88030B7E4 /* libRNI18n.a */; };
-		78F0F50078094C39A5E182B8 /* MaterialIcons.ttf in Resources */ = {isa = PBXBuildFile; fileRef = E35C9CB0D351455CA78172F7 /* MaterialIcons.ttf */; };
 		832341BD1AAA6AB300B99B32 /* libRCTText.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 832341B51AAA6A8300B99B32 /* libRCTText.a */; };
 		84BA611BE34441DA9AF0D61F /* Feather.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 5785F05EE0734F6A9E6EAB81 /* Feather.ttf */; };
 		8BB478984FC443C1A21AC341 /* Zocial.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 170EF3CF8F3C492FB9655EF2 /* Zocial.ttf */; };
@@ -430,7 +429,6 @@
 		B93FA0D79AC24A0199256D92 /* Entypo.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = file; name = Entypo.ttf; path = "../node_modules/react-native-vector-icons/Fonts/Entypo.ttf"; sourceTree = "<group>"; };
 		C918162C908048F890487775 /* Roboto.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = Roboto.ttf; path = "../node_modules/native-base/Fonts/Roboto.ttf"; sourceTree = "<group>"; };
 		DFF9BBF679A3479BABFEE0FC /* EvilIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = EvilIcons.ttf; path = "../node_modules/native-base/Fonts/EvilIcons.ttf"; sourceTree = "<group>"; };
-		E35C9CB0D351455CA78172F7 /* MaterialIcons.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = MaterialIcons.ttf; path = "../node_modules/native-base/Fonts/MaterialIcons.ttf"; sourceTree = "<group>"; };
 		E9EC858A47A4445483DA6946 /* libRNVectorIcons.a */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = archive.ar; path = libRNVectorIcons.a; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -689,7 +687,6 @@
 				5785F05EE0734F6A9E6EAB81 /* Feather.ttf */,
 				47A41B5DD3E642DE94710EA3 /* MaterialCommunityIcons.ttf */,
 				54D242ECDD1B45EB87F80BA8 /* Entypo.ttf */,
-				E35C9CB0D351455CA78172F7 /* MaterialIcons.ttf */,
 			);
 			name = Resources;
 			sourceTree = "<group>";
@@ -1309,7 +1306,6 @@
 				84BA611BE34441DA9AF0D61F /* Feather.ttf in Resources */,
 				957F0777AA79418988119DC4 /* MaterialCommunityIcons.ttf in Resources */,
 				3B8A1C07AEC1472392BB1377 /* Entypo.ttf in Resources */,
-				78F0F50078094C39A5E182B8 /* MaterialIcons.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

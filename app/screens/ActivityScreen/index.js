@@ -1,23 +1,24 @@
 import React, {Component} from "react";
-import {View} from 'react-native';
-import {createMaterialTopTabNavigator, createStackNavigator, StackNavigator, TabNavigator} from 'react-navigation';
+import {createMaterialTopTabNavigator, createStackNavigator} from 'react-navigation';
 import ActivityDetailScreen from '../../components/ActivityDetail/ActivityDetailScreen';
 import ActivityList from './ActivityList'
 import {connect} from 'react-redux';
 import {deepCopy} from '../../lib/helpFunctions';
-import {refreshActivityList} from '../../actions/creators';
+import * as globalActions from '../../reducers/global/globalActions';
+import {bindActionCreators} from "redux";
+import {  Toast} from 'native-base';
 
 const enterableList = ({ navigation,screenProps }) => (
-  <ActivityList data={screenProps.enterableActivities} navigation={navigation}/>
+  <ActivityList type="enterable" dst="enterableActivities" data={screenProps.enterableActivities} navigation={navigation}/>
 );
 const preparingList = ({ navigation,screenProps }) => (
-  <ActivityList data={screenProps.preparingActivities} navigation={navigation}/>
+  <ActivityList type="preparing" dst="preparingActivities" data={screenProps.preparingActivities} navigation={navigation}/>
 );
 const goingList = ({ navigation,screenProps }) => (
-  <ActivityList data={screenProps.goingActivities} navigation={navigation}/>
+  <ActivityList type="going" dst="goingActivities" data={screenProps.goingActivities} navigation={navigation}/>
 );
 const doneList = ({ navigation,screenProps }) => (
-  <ActivityList data={screenProps.doneActivities} navigation={navigation}/>
+  <ActivityList type="done" dst="doneActivities" data={screenProps.doneActivities} navigation={navigation}/>
 );
 
 const ListTabScreen = createMaterialTopTabNavigator(
@@ -66,16 +67,28 @@ const ListTabScreen = createMaterialTopTabNavigator(
   });
 
 class TabsScreenComponent extends Component {
+  static router = ListTabScreen.router;
+  componentWillMount () {
+    this.props.actions.refreshActivityList(this.props.userId)
+  }
+
+  componentDidUpdate() {
+    if(this.props.toast)
+      Toast.show({
+        text: this.props.toast,
+        position: 'bottom',
+        duration: 3000,
+        onClose:()=>{
+          this.props.actions.receiveToast(null);
+        }
+      })
+  }
   render() {
     return (
-      <View style={{flex:1}}>
-        <ListTabScreen screenProps={this.props.lists}
-                       navigation={this.props.navigation} />
-      </View>
+      <ListTabScreen navigation={this.props.navigation} screenProps={this.props.lists}/>
     )
   }
 }
-TabsScreenComponent.router = ListTabScreen.router;
 /**
  * @Author: weiwenda
  * @Description: 为了添加列表数据，使用View进行简单嵌套
@@ -83,14 +96,15 @@ TabsScreenComponent.router = ListTabScreen.router;
  */
 const mapDispatchToProps = (dispatch) => {
   return {
-    refreshActivityList: () => {
-      dispatch(refreshActivityList());
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
-  const {goingActivities, doneActivities, preparingActivities, enterableActivities} =state.userData;
-  return {lists:deepCopy({
+  const {goingActivities, doneActivities, preparingActivities, enterableActivities} =state.global;
+  return {
+    userId:state.global.currentUser.userId,
+    toast: state.toast,
+    lists:deepCopy({
     goingActivities:goingActivities,
     doneActivities:doneActivities,
     preparingActivities:preparingActivities,

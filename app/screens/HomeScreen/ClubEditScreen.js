@@ -7,23 +7,37 @@ import {imagePickerOptions} from '../MyScreen/UserDataScreen';
 import colors from '../../lib/colors';
 import normalize from '../../lib/normalizeText';
 import {connect} from "react-redux";
-import {updateClub,uploadImage} from '../../actions/creators';
+import  * as globalActions from '../../reducers/global/globalActions';
+import {bindActionCreators} from "redux";
 import {contentEq} from "../../lib/helpFunctions";
+import {HeaderButtons}from "../../components/HeaderButtons";
 
 class ClubEditScreen extends Component {
+
+  static navigationOptions = ({navigation}) => {
+    const {state} = navigation;
+    const {deleteAction} = "params" in state && state.params;
+    const component = <HeaderButtons>
+      <HeaderButtons.Item
+        title='删除'
+        onPress={deleteAction}
+      />
+    </HeaderButtons>;
+    return {
+      headerRight: component
+    }
+  };
+
   showImagePicker() {
     ImagePicker.showImagePicker(imagePickerOptions, (response) => {
-      // console.log('Response = ', response);
-
       if (response.didCancel) {
-        //donothing
         console.log('User cancelled image picker');
       }
       else if (response.error) {
-        //donothing
         console.log('ImagePicker Error: ', response.error);
       } else {
-        this.props.uploadImage('favicon', response.uri,this.updateLocal);
+        this.props.actions.uploadImage(this.props.userId,response.uri,
+          (uri)=>this.updateLocal('favicon',uri));
       }
     });
   }
@@ -34,6 +48,12 @@ class ClubEditScreen extends Component {
       modalVisible: false,
       data:{...props.navigation.state.params.data}
     }
+  }
+  componentWillMount() {
+    this.props.navigation.setParams({deleteAction:()=>{
+      this.props.actions.removeClub(this.props.userId,this.state.data.clubId)
+      this.props.navigation.popToTop();
+    }})
   }
   updateLocal=(domain,content)=>{
     let tmp = this.state.data;
@@ -158,7 +178,9 @@ class ClubEditScreen extends Component {
           </List>
           <Button
             onPress={()=>{
-              this.props.updateClub(this.state.data,this.props.navigation.state.params);
+              if(!contentEq(this.state.data,this.props.navigation.state.params)){
+                this.props.actions.updateClub(this.props.userId,this.state.data);
+              }
               this.props.navigation.goBack();
             }}
             borderRadius={5}
@@ -178,17 +200,11 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    uploadImage:(domain,content,callback)=>{
-      dispatch(uploadImage(domain,content,callback));
-    },
-    updateClub:(data,oldData)=>{
-      if(!contentEq(data,oldData))
-        dispatch(updateClub(data));
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
-  return {};
+  return {userId:state.global.currentUser.userId};
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClubEditScreen);

@@ -1,14 +1,15 @@
 import React, {Component} from 'react';
 import {ScrollView, View, Text, StyleSheet} from 'react-native';
 import {Card, List, Icon} from 'react-native-elements';
-import {Fab, Button, Container, Toast} from 'native-base';
+import {Fab, Button, Container, Toast,Root} from 'native-base';
 import {server} from '../../lib/urls';
 import DetailPlane from './DetailPlane';
 import TablelikeItem from '../TablelikeItem';
 import moment from 'moment';
 import colors from '../../lib/colors';
 import {connect} from 'react-redux';
-import {partActivity} from '../../actions/creators';
+import  * as globalActions from '../../reducers/global/globalActions';
+import {bindActionCreators} from "redux";
 
 
 class ActivityDetail extends Component {
@@ -21,28 +22,19 @@ class ActivityDetail extends Component {
   }
 
   componentDidMount() {
-    fetch(`${server}activity/detail?id=${this.props.navigation.state.params.activityId}`)
+    fetch(`${server}/activity/detail?id=${this.props.navigation.state.params.activityId}`)
       .then((response) => response.json())
       .then(obj => {
         console.log(obj.data);
         this.setState({...obj.data});
       });
   }
-
-  componentWillUpdate() {
-    if(this.props.toast)
-    Toast.show({
-      text: this.props.toast,
-      position: 'bottom',
-      buttonText: 'Okay'
-    })
-  }
   onMessage = (event) =>{
     try {
       const action = JSON.parse(event.nativeEvent.data)
-      if (action.type === 'setHeight' && action.height > 0) {
-        // console.log(action.height);
-        this.setState({ DPHeight: action.height+this.state.DPHeight})
+      if (action.type === 'setHeight' && action.height > 0 &&action.height<3000) {
+        console.log(action.height);
+        this.setState({ DPHeight: action.height+40})
       }
     } catch (error) {
       // pass
@@ -116,11 +108,17 @@ class ActivityDetail extends Component {
           <Icon name="bars" color='white' type="font-awesome"/>
           <Button
             onPress={() => {
-              this.props.partActivity(this.props.user_id, this.state.activityId);
+              this.props.actions.partActivity(this.props.userId, this.state.activityId);
               this.props.navigation.goBack();
             }}
             style={{backgroundColor: '#34A34F'}}>
             <Icon name="plus" type="font-awesome" color='white'/>
+          </Button>
+          <Button onPress={()=>{
+            this.props.actions.removeActivity(this.props.userId,this.state.activityId);
+            this.props.navigation.popToTop();
+          }} style={{backgroundColor: '#ca6655'}}>
+            <Icon name="trash-o" type="font-awesome" color="white"/>
           </Button>
           <Button style={{backgroundColor: '#3B5998'}}>
             <Icon name="star-o" type="font-awesome" color='white'/>
@@ -129,7 +127,6 @@ class ActivityDetail extends Component {
             <Icon name="external-link" type='font-awesome' color='white'/>
           </Button>
         </Fab>
-
       </Container>
     );
   }
@@ -142,15 +139,12 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    partActivity: (uid, aid) => {
-      dispatch(partActivity(uid, aid));
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
   return {
-    user_id: state.userData.user_id,
-    toast: state.toast,
+    userId: state.global.currentUser.userId,
   };
 };
 

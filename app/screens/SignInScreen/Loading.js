@@ -104,10 +104,9 @@ class App extends Component{
             () => {
               this.props.actions.getSessionToken(this.props.navigation)
             },
-            2500
+            1000
         )
   }
-
   render () {
     return (
       <View style={styles.container}>

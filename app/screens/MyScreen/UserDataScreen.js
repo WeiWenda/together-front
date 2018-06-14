@@ -1,5 +1,5 @@
 import React, {Component} from "react";
-import {AsyncStorage,StyleSheet, TouchableOpacity, ScrollView, View, Image, DatePickerAndroid, Modal} from 'react-native';
+import {StyleSheet, TouchableOpacity, ScrollView, View, Image, DatePickerAndroid, Modal} from 'react-native';
 import {List, Icon, ListItem, ButtonGroup} from 'react-native-elements';
 import Picker from 'react-native-picker';
 import ImagePicker from 'react-native-image-picker';
@@ -7,8 +7,10 @@ import BottomText from '../../components/BottomText';
 import colors from '../../lib/colors';
 import areas from '../../lib/chinese';
 import {connect} from "react-redux";
-import {editUser,uploadImage} from '../../actions/creators';
+import  * as globalActions from '../../reducers/global/globalActions';
+import * as authActions from '../../reducers/auth/authActions';
 import moment from "moment";
+import {bindActionCreators} from "redux";
 
 const sexButtons = ['男', '女'];
 export const imagePickerOptions= {
@@ -40,16 +42,12 @@ class ProfileScreen extends Component {
       if (action === DatePickerAndroid.dismissedAction) {
         //do nothing
       } else {
-        this.props.editDomain('birthday', moment({y: year, M: month, d: day}).format());
+        this.props.actions.modifyUser(this.props.userId,'birthday', moment({y: year, M: month, d: day}).format());
       }
     } catch ({code, message}) {
       console.warn(message);
     }
   }
-  _signOutAsync = async () => {
-    await AsyncStorage.clear();
-    this.props.navigation.navigate('Auth');
-  };
 
   _createDateData(minYear, maxYear) {
     let month = [];
@@ -96,7 +94,7 @@ class ProfileScreen extends Component {
       selectedValue: [preset.year() + '年', (preset.month() + 1) + '月', preset.date() + '日'],
       onPickerConfirm: (pickedValue, pickedIndex) => {
         this._setModalVisible(false);
-        this.props.editDomain('birthday',
+        this.props.actions.modifyUser(this.props.userId,'birthday',
           moment({y: 1900 + pickedIndex[0], M: pickedIndex[1], d: pickedIndex[2] + 1})
             .format('YYYY-MM-DD'));
       },
@@ -125,10 +123,10 @@ class ProfileScreen extends Component {
       pickerConfirmBtnText: '确认',
       pickerCancelBtnText: '取消',
       pickerData: data,
-      selectedValue: preset.split('/'),
+      selectedValue: (preset == null)?"山西/临汾/临汾市".split('/'):preset.split('/'),
       onPickerConfirm: data => {
         this._setModalVisible(false);
-        this.props.editDomain('address', data.join('/'));
+        this.props.actions.modifyUser(this.props.userId,'address', data.join('/'));
       },
       onPickerCancel: data => {
         this._setModalVisible(false);
@@ -153,7 +151,8 @@ class ProfileScreen extends Component {
         console.log('ImagePicker Error: ', response.error);
       } else {
         // this.props.editDomain('favicon',response.uri);
-        this.props.uploadImage('favicon', response.uri,editUser);
+        this.props.actions.uploadImage(this.props.userId,response.uri,
+          (uri)=> this.props.actions.modifyLocalUser('favicon',uri));
       }
     });
 
@@ -212,7 +211,8 @@ class ProfileScreen extends Component {
             <ListItem title="昵称" rightTitle={this.props.name}
                       onPress={() =>
                         navigation.navigate('TextEdit', {
-                          action: this.props.editDomain,
+                          action: this.props.actions.modifyUser,
+                          userId:this.props.userId,
                           domain: 'name',
                           title: "修改昵称",
                           text: this.props.name,
@@ -237,8 +237,9 @@ class ProfileScreen extends Component {
             <ListItem title="个性签名" rightTitle={this.props.signature}
                       onPress={() =>
                         navigation.navigate('TextEdit', {
-                          action: this.props.editDomain,
+                          action: this.props.actions.modifyUser,
                           domain: 'signature',
+                          userId:this.props.userId,
                           title: "修改签名",
                           text: this.props.signature,
                         })
@@ -258,7 +259,7 @@ class ProfileScreen extends Component {
               <ButtonGroup
                 containerStyle={{flex: 0.5, marginRight: 0,}}
                 onPress={(selectedIndex) => {
-                  this.props.editDomain('sex', selectedIndex)
+                  this.props.actions.modifyUser(this.props.userId,'sex', selectedIndex)
                 }}
                 selectedIndex={this.props.sex}
                 buttons={sexButtons}/>
@@ -277,7 +278,8 @@ class ProfileScreen extends Component {
             <ListItem title="标签" rightTitle={this.props.labels}
                       onPress={() =>
                         navigation.navigate('LabelsEdit', {
-                          action: this.props.editDomain,
+                          action: this.props.actions.modifyUser,
+                          userId:this.props.userId,
                           domain: 'labels',
                           title: "编辑标签",
                           preset: this.props.labels,
@@ -287,7 +289,8 @@ class ProfileScreen extends Component {
             <ListItem title="兴趣" rightTitle={this.props.habits}
                       onPress={() =>
                         navigation.navigate('LabelsEdit', {
-                          action: this.props.editDomain,
+                          action: this.props.actions.modifyUser,
+                          userId:this.props.userId,
                           domain: 'habits',
                           title: "编辑爱好",
                           preset: this.props.habits,
@@ -295,7 +298,7 @@ class ProfileScreen extends Component {
                       }
             />
             <ListItem title="注销登录"
-                      onPress={this._signOutAsync}
+                      onPress={()=>this.props.actions.logout(this.props.navigation)}
             />
 
           </List>
@@ -310,17 +313,12 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    editDomain: (domain, content) => {
-        dispatch(editUser(domain, content));
-    },
-    uploadImage: (domain, uri,callback) => {
-        dispatch(uploadImage(domain, uri,callback));
-    },
-  };
+    actions: bindActionCreators({...globalActions,...authActions}, dispatch)
+  }
 };
 
 const mapStateToProps = state => {
-  return {...state.userData};
+  return state.global.currentUser.toJS();
   // return state.userdata;
 };
 const ProfileScreenWrapped = connect(mapStateToProps, mapDispatchToProps)(ProfileScreen);

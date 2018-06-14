@@ -49,8 +49,8 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-function buttonPressHandler (resetPassword, email) {
-  resetPassword(email)
+function buttonPressHandler (resetPassword, email,navigation) {
+  resetPassword(email,navigation)
 }
 /**
  * ### Translations
@@ -63,7 +63,8 @@ class ForgotPassword extends Component{
     let loginButtonText = I18n.t('ForgotPassword.reset_password')
     let onButtonPress = buttonPressHandler.bind(null,
                                                 this.props.actions.resetPassword,
-                                                this.props.auth.form.fields.email)
+                                                this.props.auth.form.fields.email,
+                                                this.props.navigation)
 
     return (
       <LoginRender

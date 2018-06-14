@@ -3,8 +3,6 @@ import {ScrollView, StyleSheet, Text, TouchableHighlight, View} from "react-nati
 import {Card, List, Avatar, ListItem} from 'react-native-elements';
 // import ListItem from '../components/ListItem';
 import ExpanableList from 'react-native-expandable-section-flatlist';
-import {connect} from "react-redux";
-import {deepCopy} from "../../lib/helpFunctions";
 
 class AllKindClubList extends Component {
   nameList = ['我创建的俱乐部', '我管理的俱乐部', '我加入的俱乐部'];
@@ -69,13 +67,14 @@ class AllKindClubList extends Component {
 
   render() {
     return (
-      <ScrollView>
+      <View>
         <ListItem
           title="创建新的俱乐部"
           onPress={() => this.props.navigation.navigate("ClubAdd")}
           rightIcon={{name: 'add'}}
         />
         <ExpanableList
+          scrollEnabled={false}
           contentContainerStyle={{ flexGrow: 1}}
           ref={instance => this.ExpandableList = instance}
           dataSource={this.getData(this.props)}
@@ -85,7 +84,7 @@ class AllKindClubList extends Component {
           renderSectionHeaderX={this._renderSection}
           openOptions={this.kindstate.map((e,i)=>[e,i]).filter(e=>e[0]).map(e=>e[1])}
         />
-      </ScrollView>
+      </View>
     )
   }
 }

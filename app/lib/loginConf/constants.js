@@ -1,6 +1,22 @@
 import keyMirror from 'key-mirror'
 
 export default keyMirror({
+  ADD_CLUB:null,
+  SAVE_CLUB:null,
+  UPDATE_CLUB:null,
+  REMOVE_CLUB:null,
+  REFRESH_CLUBLIST:null,
+  LOAD_CLUBLIST:null,
+  EDIT_USER:null,
+  ADD_LABEL:null,
+  ADD_ACTIVITY:null,
+  SAVE_ACTIVITY:null,
+  REMOVE_ACTIVITY:null,
+  LOAD_ACTIVITY:null,
+  REFRESH_ACTIVITYLIST:null,
+  PART_ACTIVITY:null,
+  RECEIVE_TOAST:null,
+
   SET_PLATFORM: null,
   SET_VERSION: null,
 

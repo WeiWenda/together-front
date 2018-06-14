@@ -8,7 +8,8 @@ import colors from '../../lib/colors';
 import normalize from '../../lib/normalizeText';
 import {deepCopy} from "../../lib/helpFunctions";
 import {connect} from "react-redux";
-import {addClub,saveClub,uploadImage} from '../../actions/creators';
+import * as globalActions from '../../reducers/global/globalActions';
+import {bindActionCreators} from "redux";
 
 class ClubAddScreen extends Component {
   showImagePicker() {
@@ -23,7 +24,8 @@ class ClubAddScreen extends Component {
         //donothing
         console.log('ImagePicker Error: ', response.error);
       } else {
-        this.props.uploadImage('favicon', response.uri,addClub);
+        this.props.actions.uploadImage(this.props.userId,response.uri,
+          (uri)=>this.props.actions.addClub('favicon',uri));
       }
     });
   }
@@ -84,7 +86,7 @@ class ClubAddScreen extends Component {
             <ListItem title="俱乐部名称" rightTitle={this.props.name}
                       onPress={() =>
                         navigation.navigate('HomeTextEdit', {
-                          action: this.props.addClub,
+                          action: this.props.actions.addClub,
                           domain: 'name',
                           title: "编辑名称",
                           text: this.props.name,
@@ -94,7 +96,7 @@ class ClubAddScreen extends Component {
             <ListItem title="宣言" rightTitle={this.props.slogan}
                       onPress={() =>
                         navigation.navigate('HomeTextEdit', {
-                          action: this.props.addClub,
+                          action: this.props.actions.addClub,
                           domain: 'slogan',
                           title: "编辑宣言",
                           text: this.props.slogan,
@@ -104,7 +106,7 @@ class ClubAddScreen extends Component {
             <ListItem title="简介" rightTitle={this.props.introduction}
                       onPress={() =>
                         navigation.navigate('HomeTextEdit', {
-                          action: this.props.addClub,
+                          action: this.props.actions.addClub,
                           domain: 'introduction',
                           title: "编辑简介",
                           text: this.props.introduction,
@@ -114,7 +116,7 @@ class ClubAddScreen extends Component {
             <ListItem title="主打项目" rightTitle={this.props.habits}
                       onPress={() =>
                         navigation.navigate('HomeLabelsEdit', {
-                          action: this.props.addClub,
+                          action: this.props.actions.addClub,
                           domain: 'habits',
                           title: "编辑主打项目",
                           preset: this.props.habits,
@@ -125,29 +127,29 @@ class ClubAddScreen extends Component {
           <List>
             <ListItem title="负责人" textInput
                       hideChevron={!this.props.chiefName}
-                      onPressRightIcon={()=>this.props.addClub('chiefName','')}
+                      onPressRightIcon={()=>this.props.actions.addClub('chiefName','')}
                       rightIcon={{type:'ionicon',name:'ios-backspace-outline'}}
                       textInputValue={this.props.chiefName}
                       textInputStyle={{height:null,padding:0}}
                       textInputContainerStyle={{paddingRight:10}}
                       textInputPlaceholder='输入'
-                      textInputOnChangeText={text=>this.props.addClub('chiefName',text)}
+                      textInputOnChangeText={text=>this.props.actions.addClub('chiefName',text)}
                       textInputMaxLength={5} />
             <ListItem title="电话" textInput
                       hideChevron={!this.props.callnumber}
-                      onPressRightIcon={()=>this.props.addClub('callnumber','')}
+                      onPressRightIcon={()=>this.props.actions.addClub('callnumber','')}
                       rightIcon={{type:'ionicon',name:'ios-backspace-outline'}}
                       keyboardType='numeric'
                       textInputValue={this.props.callnumber}
                       textInputStyle={{height:null,padding:0}}
                       textInputContainerStyle={{paddingRight:10}}
                       textInputPlaceholder='输入'
-                      textInputOnChangeText={text=>this.props.addClub('callnumber',text)}
+                      textInputOnChangeText={text=>this.props.actions.addClub('callnumber',text)}
                       textInputMaxLength={11} />
           </List>
           <Button
             onPress={()=>{
-              this.props.saveClub();
+              this.props.actions.saveClub(this.props.userId);
               this.props.navigation.goBack();
             }}
             borderRadius={5}
@@ -167,20 +169,13 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    uploadImage:(domain,content,callback)=>{
-      dispatch(uploadImage(domain,content,callback));
-    },
-    addClub: (domain, content) => {
-      dispatch(addClub(domain, content));
-    },
-    saveClub:()=>{
-      dispatch(saveClub());
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
-  return deepCopy(state.newClubData);
-  // return state.userdata;
+  let tmp = deepCopy(state.newClubData);
+  tmp['userId'] = state.global.currentUser.userId;
+  return tmp;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ClubAddScreen);

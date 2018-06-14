@@ -22,19 +22,26 @@ const {
 
   GET_STATE,
   SET_STATE,
-  SET_STORE
+  SET_STORE,
+
+  LOAD_ACTIVITY,
+  LOAD_CLUBLIST,
+  EDIT_USER,
 
 } = require('../../lib/loginConf/constants').default
 
 import InitialState from './globalInitialState'
 
 const initialState = new InitialState()
+
+import {Record,fromJS} from 'immutable'
 /**
  * ## globalReducer function
  * @param {Object} state - initialState
  * @param {Object} action - type and payload
  */
 export default function globalReducer (state = initialState, action) {
+  console.log(action)
   if (!(state instanceof InitialState)) return initialState.merge(state)
 
   switch (action.type) {
@@ -54,10 +61,10 @@ export default function globalReducer (state = initialState, action) {
     case SIGNUP_SUCCESS:
     case LOGIN_SUCCESS:
     case GET_PROFILE_SUCCESS:
-      return state.set('currentUser', action.payload)
+      return state.set('currentUser', new(Record(action.payload))())
 
     case SESSION_TOKEN_SUCCESS:
-      return state.set('currentUser', action.payload.sessionToken)
+      return state.set('currentUser', new(Record(action.payload.sessionToken))())
 
     /**
      * ### Clear currentUser
@@ -124,7 +131,14 @@ export default function globalReducer (state = initialState, action) {
           .set('currentState', null)
       return next
 
-  }
+    case LOAD_ACTIVITY:
+      return state.set(action.data.domain,action.data.data);
 
+    case LOAD_CLUBLIST:
+      return state.set(action.data.domain,action.data.data);
+
+    case EDIT_USER:
+      return state.setIn(['currentUser',action.data.domain],action.data.content);
+  }
   return state
 }

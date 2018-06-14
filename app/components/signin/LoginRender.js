@@ -191,6 +191,7 @@ class LoginRender extends Component {
         onPress={() => {
           actions.registerState()
           this.props.navigation.navigate('Register');
+          // Actions.Register()
         }} >
         <Text>{I18n.t('LoginRender.register')}</Text>
       </TouchableHighlight>

@@ -50,8 +50,8 @@ function mapDispatchToProps (dispatch) {
   }
 }
 
-function buttonPressHandler (signup, username, email, password) {
-  signup(username, email, password)
+function buttonPressHandler (signup, username, email, password,navigation) {
+  signup(username, email, password,navigation)
 }
 
 /**
@@ -67,7 +67,8 @@ class Register extends Component{
                                                 this.props.actions.signup,
                                                 this.props.auth.form.fields.username,
                                                 this.props.auth.form.fields.email,
-                                                this.props.auth.form.fields.password)
+                                                this.props.auth.form.fields.password,
+                                                this.props.navigation)
 
     return (
       <LoginRender

@@ -1,4 +1,4 @@
-import {ADD_LABEL}from '../actions/types';
+const {ADD_LABEL}= require('../lib/loginConf/constants').default;
 import {server} from '../lib/urls';
 import shortid from 'shortid';
 
@@ -7,7 +7,7 @@ const headers = {
   'Content-Type': 'application/json'
 };
 const addLabel = (state, action) => {
-  fetch(`${server}user/addLabel`, {
+  fetch(`${server}/user/addLabel`, {
     method: 'POST',
     headers: headers,
     body: JSON.stringify({
@@ -19,7 +19,7 @@ const addLabel = (state, action) => {
     .then(text => console.log(text));
 };
 const fetchData = (param) => {
-  const url = `${server}${param === 'labels' ? "user/" : ""}${param}`;
+  const url = `${server}/${param === 'labels' ? "user/" : ""}${param}`;
   return fetch(url)
     .then(text => text.json())
 };

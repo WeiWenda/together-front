@@ -65,7 +65,7 @@ var styles = StyleSheet.create({
 /**
  * ### Translations
  */
-var I18n = require('react-native-i18n')
+import  I18n from  'react-native-i18n';
 import Translations from '../../lib/loginConf/Translations'
 I18n.translations = Translations
 
@@ -74,8 +74,9 @@ class Header extends  Component{
    * ## Header.class
    * set the initial state of having the button be disabled.
    */
-  getInitialState () {
-    return {
+  constructor(props){
+    super(props);
+    this.state = {
       text: '',
       isDisabled: true
     }

@@ -33,6 +33,7 @@
     "react-native-webview-bridge-updated": "^1.0.9",
     "react-native-zss-rich-text-editor": "^1.1.0",
     "react-navigation": "2.0.0",
+    "react-navigation-header-buttons": "^1.0.0",
     "react-redux": "^5.0.7",
     "redux": "^4.0.0",
     "redux-thunk": "^2.2.0",

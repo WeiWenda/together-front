@@ -1,4 +1,4 @@
-import {RECEIVE_TOAST} from "../actions/types";
+const {RECEIVE_TOAST} = require('../lib/loginConf/constants').default;
 
 const toastReducer = (state = null, action) => {
   switch (action.type) {

@@ -68,7 +68,7 @@ class LoginForm extends Component{
 
     let username = {
       label: I18n.t('LoginForm.username'),
-      maxLength: 12,
+      maxLength: 20,
       editable: !this.props.form.isFetching,
       hasError: this.props.form.fields.usernameHasError,
       error: this.props.form.fields.usernameErrorMsg

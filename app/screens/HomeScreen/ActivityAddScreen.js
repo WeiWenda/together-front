@@ -11,14 +11,13 @@ import colors from '../../lib/colors';
 import moment from 'moment';
 import'moment/locale/zh-cn';
 moment.locale('zh-cn');
-
-import {uploadImage as uploadImageFunc} from '../../reducers/userReducer';
 import normalize from '../../lib/normalizeText';
 import {deepCopy, durationUnit} from "../../lib/helpFunctions";
 import {connect} from "react-redux";
-import {addActivity, saveActivity, uploadImage} from '../../actions/creators';
+import * as globalActions from '../../reducers/global/globalActions';
 import {RichTextEditor, RichTextToolbar} from '../../components/react-native-zss-rich-text-editor';
 import actionTools from '../../lib/editorTools';
+import {bindActionCreators} from "redux";
 
 const privileges = ['好友可见', '俱乐部可见', '所有人可见'];
 
@@ -99,7 +98,7 @@ class ActivityAddScreen extends Component {
         now.add(pickedIndex[0], 'days');
         now.hour(pickedIndex[1]);
         now.minute(pickedIndex[2]);
-        this.props.addActivity(domain,
+        this.props.actions.addActivity(domain,
           now.format('YYYY-MM-DD HH:mm:ss'));
       },
       onPickerCancel: (pickedValue, pickedIndex) => {
@@ -124,7 +123,7 @@ class ActivityAddScreen extends Component {
       selectedValue: preset.split(' '),
       onPickerConfirm: (pickedValue, pickedIndex) => {
         this._setModalVisible(false);
-        this.props.addActivity(domain, pickedValue.join(" "));
+        this.props.actions.addActivity(domain, pickedValue.join(" "));
       },
       onPickerCancel: (pickedValue, pickedIndex) => {
         this._setModalVisible(false);
@@ -152,8 +151,8 @@ class ActivityAddScreen extends Component {
       onPickerConfirm: (pickedValue, pickedIndex) => {
         this._setModalVisible(false);
         if (pickedValue[0] === '俱乐部可见')
-          this.props.addActivity('clubId', this.props.chiefClubs[pickedIndex[1]].clubId);
-        this.props.addActivity(domain, pickedIndex[0]);
+          this.props.actions.addActivity('clubId', this.props.chiefClubs[pickedIndex[1]].clubId);
+        this.props.actions.addActivity(domain, pickedIndex[0]);
       },
       onPickerCancel: (pickedValue, pickedIndex) => {
         this._setModalVisible(false);
@@ -184,7 +183,8 @@ class ActivityAddScreen extends Component {
         //donothing
         console.log('ImagePicker Error: ', response.error);
       } else {
-        this.props.uploadImage('favicon', response.uri, addActivity);
+        this.props.actions.uploadImage(this.props.userId, response.uri,(uri)=>
+          this.props.actions.addActivity('favicon',uri));
       }
     });
   }
@@ -200,7 +200,7 @@ class ActivityAddScreen extends Component {
         //donothing
         console.log('ImagePicker Error: ', response.error);
       } else {
-        uploadImageFunc(this.props.organizerId, response.uri, (fileUrl) => {
+        this.props.actions.uploadImage(this.props.organizerId, response.uri, (fileUrl) => {
           this._richtext.insertImage({src: fileUrl, width: Dimensions.get('window').width - 40});
         });
       }
@@ -210,7 +210,7 @@ class ActivityAddScreen extends Component {
   saveAll() {
     this._richtext.getTitleText().then((title) => {
       this._richtext.getContentHtml().then((content) => {
-        this.props.saveActivity({name: title, introduction: content});
+        this.props.actions.saveActivity({organizerId:this.props.userId,name: title, introduction: content});
       });
     });
     this.props.navigation.goBack();
@@ -229,7 +229,7 @@ class ActivityAddScreen extends Component {
           name='ios-backspace-outline'
           color={colors.grey4}
           onPress={() => {
-            this.props.addActivity('notes', '');
+            this.props.actions.addActivity('notes', '');
             this._inputRef.setState({layoutHeight: 30});
           }}
         />
@@ -365,7 +365,7 @@ class ActivityAddScreen extends Component {
             <ListItem title="活动地点" rightTitle={this.props.address}
                       onPress={() =>
                         navigation.navigate('HomeMap', {
-                          action: this.props.addActivity,
+                          action: this.props.actions.addActivity,
                           domain: 'address',
                           title: "选择地点",
                           text: this.props.address,
@@ -408,7 +408,7 @@ class ActivityAddScreen extends Component {
                                      multiline={true}
                                      underlineColorAndroid={'transparent'}
                                      onChange={event => {
-                                       this.props.addActivity('notes', event.nativeEvent.text)
+                                       this.props.actions.addActivity('notes', event.nativeEvent.text)
                                      }
                                      }
                                      value={this.props.notes}
@@ -429,7 +429,7 @@ class ActivityAddScreen extends Component {
             title='直接发布'/>
           <Button
             onPress={() => {
-              this.props.saveActivity();
+              this.props.actions.saveActivity(this.props.uesrId);
               this.props.navigation.goBack();
             }}
             borderRadius={5}
@@ -459,23 +459,14 @@ const styles = StyleSheet.create({
 });
 const mapDispatchToProps = (dispatch) => {
   return {
-    uploadImage: (domain, content, callback) => {
-      dispatch(uploadImage(domain, content, callback));
-    },
-    addActivity: (domain, content) => {
-      dispatch(addActivity(domain, content));
-    },
-    saveActivity: (data) => {
-      dispatch(saveActivity(data));
-    },
-  };
+    actions: bindActionCreators(globalActions, dispatch)
+  }
 };
 const mapStateToProps = state => {
   let tmp = deepCopy(state.newActivityData);
-  tmp['chiefClubs'] = deepCopy(state.userData.chiefClubs);
-  // console.log(tmp);
+  tmp['userId'] = state.global.currentUser.userId;
+  tmp['chiefClubs'] = deepCopy(state.global.chiefClubs);
   return tmp;
-  // return state.userdata;
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(ActivityAddScreen);

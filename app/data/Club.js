@@ -7,6 +7,7 @@ class Club {
   }
   set(domain,content){
     this[domain]=content;
+    return Object.assign( Object.create( Object.getPrototypeOf(this)), this)
   }
 }
 

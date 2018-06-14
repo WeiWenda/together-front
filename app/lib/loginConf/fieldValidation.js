@@ -37,7 +37,7 @@ const emailConstraints = {
 * ## username validation rule
 * read the message.. ;)
 */
-const usernamePattern = /^[a-zA-Z0-9]{6,12}$/
+const usernamePattern = /^[a-zA-Z0-9.@]{6,20}$/
 const usernameConstraints = {
   username: {
     format: {

@@ -13,6 +13,7 @@
  * ## Import
  */
 import {Record} from 'immutable'
+
 /**
  * ## InitialState
  *
@@ -27,9 +28,31 @@ import {Record} from 'immutable'
  *
  */
 var InitialState = Record({
-  currentUser: null,
+  currentUser: new (Record({
+    userId: 1,
+    name: "蔚文达",
+    password: "GEd2NE%$O38&",
+    favicon: "http://oxvctrmxs.bkt.clouddn.com/FkmsAwy0wImJ67t40EQ5dBXHhFfn",
+    sex: 0,
+    age: 0,
+    eMail: "994184916@qq.com",
+    phone: "18706793622",
+    address: "山西/临汾/临汾市",
+    registerTime: null,
+    birthday:null,
+    labels:"",
+    signature: "13124124",
+    seo: false,
+    chief: false
+  }))() ,
   showState: false,
   currentState: null,
-  store: null
+  store: null,
+  memberClubs: [],
+  chiefClubs: [],
+  goingActivities: [],
+  doneActivities: [],
+  preparingActivities: [],
+  enterableActivities: []
 })
 export default InitialState
