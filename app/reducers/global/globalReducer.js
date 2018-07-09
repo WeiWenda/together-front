@@ -28,6 +28,13 @@ const {
   LOAD_CLUBLIST,
   EDIT_USER,
 
+  LOAD_FRIEND,
+  LOAD_WEBSOCKET,
+  MERGE_SESSIONLIST,
+  DELETE_SESSION,
+  CLEARUNREAD_SESSIONLIST,
+  ADD_SESSION
+
 } = require('../../lib/loginConf/constants').default
 
 import InitialState from './globalInitialState'
@@ -133,10 +140,29 @@ export default function globalReducer (state = initialState, action) {
 
     case LOAD_ACTIVITY:
       return state.set(action.data.domain,action.data.data);
+    case LOAD_FRIEND:
+      return state.set('friends',action.data);
+    case LOAD_WEBSOCKET:
+      return state.set('ws',action.data);
 
     case LOAD_CLUBLIST:
       return state.set(action.data.domain,action.data.data);
-
+    case MERGE_SESSIONLIST:
+      return state.set('sessionListMap',state.sessionListMap.merge(action.data));
+    case DELETE_SESSION:
+      return state.set('sessionListMap',state.sessionListMap.delete(action.data));
+    case CLEARUNREAD_SESSIONLIST:
+      let sessionItem = state.sessionListMap.get(action.data);
+      if (sessionItem) {
+        sessionItem = Object.assign({}, sessionItem, {
+          unReadMessageCount: 0
+        });
+        return state.set('sessionListMap',state.sessionListMap.set(action.data, sessionItem));
+      }
+      return state;
+    case ADD_SESSION:
+      return state.set('sessionListMap',
+        state.sessionListMap.set(String(action.data.key),action.data.content));
     case EDIT_USER:
       return state.setIn(['currentUser',action.data.domain],action.data.content);
   }

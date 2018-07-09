@@ -12,7 +12,7 @@
 /**
  * ## Import
  */
-import {Record} from 'immutable'
+import {Record,Map} from 'immutable'
 
 /**
  * ## InitialState
@@ -53,6 +53,9 @@ var InitialState = Record({
   goingActivities: [],
   doneActivities: [],
   preparingActivities: [],
-  enterableActivities: []
+  enterableActivities: [],
+  friends:[],
+  ws:null,
+  sessionListMap:new Map(),
 })
 export default InitialState

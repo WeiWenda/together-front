@@ -16,6 +16,13 @@ export default keyMirror({
   REFRESH_ACTIVITYLIST:null,
   PART_ACTIVITY:null,
   RECEIVE_TOAST:null,
+  NEW_CONNECT:null,
+  LOAD_FRIEND:null,
+  LOAD_WEBSOCKET:null,
+  MERGE_SESSIONLIST:null,
+  DELETE_SESSION:null,
+  CLEARUNREAD_SESSIONLIST:null,
+  ADD_SESSION:null,
 
   SET_PLATFORM: null,
   SET_VERSION: null,

@@ -14,21 +14,10 @@
  *
  * Config for defaults and underscore for a couple of features
  */
-import PropTypes from 'prop-types'
 import CONFIG from './config'
 import _ from 'underscore'
 import Backend from './Backend'
 import {qiniu, server} from "../urls";
-
-const UrlHeaders = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/x-www-form-urlencoded',
-};
-const JsonHeaders = {
-  'Accept': 'application/json',
-  'Content-Type': 'application/json',
-}
-
 export class Spring extends Backend {
   /**
    * ## Spring.js client
@@ -80,7 +69,6 @@ export class Spring extends Backend {
         throw (error)
       })
   }
-
   /**
    * ### login
    * encode the data and and call _fetch
@@ -227,7 +215,7 @@ export class Spring extends Backend {
     let formData = new FormData();
     let file = {uri: fileuri, type: 'image/jpeg'};
     formData.append("file", file);
-    let token = await fetch(`${server}user/upload?user_id=${user_id}`)
+    let token = await fetch(`${server}/user/upload?user_id=${user_id}`)
     let key = await token.text();
     formData.append("token", key);
     return await this._fetch({
@@ -263,7 +251,15 @@ export class Spring extends Backend {
     });
     return response.json.data;
   }
-
+  // 拉取在线用户列表
+  async getFriendList(cur_user) {
+    let result = await this._fetch({
+      method: 'GET',
+      url: `/user/getFriendList?user_id=${cur_user}`,
+      body: null
+    })
+    return result.json.data;
+  }
   /**
    * ### updateProfile
    * for this user, update their record

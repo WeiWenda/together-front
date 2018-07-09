@@ -12,16 +12,16 @@ module.exports = {
       url:server
     },
     remote: {
-      url: 'http://snowflake-parse.herokuapp.com/parse'   // match SERVER_URL in parse-server's index.js
+      url: 'http://snowflake-parse.herokuapp.com/parse'   // match SERVER_URL in parse-server's ChatRoom.js
     }
   },
   PARSE: {
-    appId: 'snowflake',                              // match APP_ID in parse-server's index.js
+    appId: 'snowflake',                              // match APP_ID in parse-server's ChatRoom.js
     local: {
-      url: 'http://localhost:1337/parse'             // match SERVER_URL in parse-server's index.js
+      url: 'http://localhost:1337/parse'             // match SERVER_URL in parse-server's ChatRoom.js
     },
     remote: {
-      url: 'http://snowflake-parse.herokuapp.com/parse'   // match SERVER_URL in parse-server's index.js
+      url: 'http://snowflake-parse.herokuapp.com/parse'   // match SERVER_URL in parse-server's ChatRoom.js
     }
   }
 }

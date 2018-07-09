@@ -14,7 +14,7 @@
  */
 const {Record} = require('immutable')
 const {
-  REGISTER
+  LOGIN
 } = require('../../lib/loginConf/constants').default
 
 /**
@@ -23,7 +23,7 @@ const {
  * fields it contains.
  */
 const Form = Record({
-  state: REGISTER,
+  state: LOGIN,
   disabled: false,
   error: null,
   isValid: true,

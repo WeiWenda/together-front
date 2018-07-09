@@ -11,7 +11,8 @@ import ClubAddScreen from './ClubAddScreen';
 import ClubEditScreen from './ClubEditScreen';
 import MapScreen from './MapScreen';
 import LabeledIcon from '../../components/LabeledIcon';
-import ClubTab from './AllKindClubList';
+import ClubTab from './ClubList';
+import FriendTab from './FriendList';
 import * as globalActions from '../../reducers/global/globalActions';
 
 import normalize from '../../lib/normalizeText'
@@ -67,9 +68,7 @@ class MainScreenComponent extends Component {
                      {...this.props}/>
           </Tab>
           <Tab heading="好友">
-            <ClubTab openScrollEnabled={this.openScrollEnabled}
-                     closeScrollEnabled={this.closeScrollEnabled}
-                     {...this.props}/>
+            <FriendTab navigation = {this.props.navigation}/>
           </Tab>
           <Tab heading="活动聊天组">
             <ClubTab openScrollEnabled={this.openScrollEnabled}

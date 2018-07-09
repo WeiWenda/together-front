@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import {StyleSheet, ScrollView, View, Text, TouchableOpacity} from "react-native";
-import {server} from '../../lib/urls';
 import colors from '../../lib/colors';
 import normalize from '../../lib/normalizeText';
 import TitledLabels from '../../components/TitledLabels';
